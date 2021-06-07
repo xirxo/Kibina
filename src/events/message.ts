@@ -31,19 +31,38 @@ export const event: Event = {
         const command = args.shift()?.toLowerCase();
         const cmd = client.commands.get(command as string);
 
-        if (!cmd)
-            return;
+        if (!cmd) return;
+        else {
+            if (cmd.scope === 'dm' && message.guild) {
+                msgEmbed
+                    .setTitle('Error')
+                    .setDescription('This command can only be run in DMs');
 
-        try {
-            cmd?.execute({ client: client, msg: message, args: args, embed: msgEmbed });
-        } catch (err) {
-            logger('error', err.message);
-            msgEmbed
-                .setTitle('Error')
-                .setDescription('There was an error while executing that command')
-                .addField('Error Message', err.message)
+                
+                return message.channel.send(msgEmbed);
+            }
+            
+            else if (cmd.scope === 'guild' && !message.guild) {
+                msgEmbed
+                    .setTitle('Error')
+                    .setDescription('This command can only be run in servers');
 
-            return message.channel.send(msgEmbed);
+                return message.channel.send(msgEmbed);
+            }
+            
+            else {
+                try {
+                    cmd?.execute({ client: client, msg: message, args: args, embed: msgEmbed });
+                } catch (err) {
+                    logger('error', err.message);
+                    msgEmbed
+                        .setTitle('Error')
+                        .setDescription('There was an error while executing that command')
+                        .addField('Error Message', err.message)
+    
+                    return message.channel.send(msgEmbed);
+                }
+            }
         }
     }
 }

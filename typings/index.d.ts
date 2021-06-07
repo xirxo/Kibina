@@ -8,7 +8,7 @@ export interface Command {
     aliases?: string[];
     desc?: string;
     cooldown?: number;
-    scope?: boolean | null
+    scope?: 'guild' | 'dm' | 'all'
 }
 
 export interface Event {

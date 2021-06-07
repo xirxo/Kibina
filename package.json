@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "npm run build -- --watch",
-    "start": "npm run build && node ."
+    "start": "bash ./run.sh"
   },
   "repository": {
     "type": "git",

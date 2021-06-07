@@ -10,6 +10,7 @@ export const command: Command = {
             .addField('Server Latency', `\`${message.createdTimestamp - msg.createdTimestamp}ms\``)
             .addField('API Latency', `\`${Math.round(client.ws.ping)}ms\``);
 
-        message.edit(embed);
+        message.delete();
+        message.channel.send(embed);
     }
 }
