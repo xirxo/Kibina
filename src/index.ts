@@ -18,7 +18,7 @@ async function main() {
 
     readdirSync('./build/commands/').forEach(async (dir) => {
         for (const file of readdirSync(`./build/commands/${dir}/`).filter(file => file.endsWith('.js'))) {
-            const { command }: { command: Command } = await import(`./build/${dir}/${file}`);
+            const { command }: { command: Command } = await import(`./commands/${dir}/${file}`);
 
             logger('info', `${command.name} command loaded`);
             client.commands.set(command.name, command);

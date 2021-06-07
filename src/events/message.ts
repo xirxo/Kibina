@@ -27,7 +27,7 @@ export const event: Event = {
                 return;
         }
 
-        const args = message.content.split(/ +/);
+        const args = message.content.slice(settings.prefix.length).split(/ +/);
         const command = args.shift()?.toLowerCase();
         const cmd = client.commands.get(command as string);
 
