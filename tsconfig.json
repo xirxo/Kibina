@@ -1,0 +1,18 @@
+{
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/**/*", "build/**/*"],
+  "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "allowJs": true,
+      "checkJs": true,
+      "outDir": "./build/",
+      "rootDir": "./src/",
+      "removeComments": true,
+      "strict": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+  }
+}
