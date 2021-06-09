@@ -2,15 +2,18 @@ import { Command } from '../../../typings/index';
 
 export const command: Command = {
     name: 'ping',
-    async execute({ embed, client, msg }) {
-        const message = await msg.channel.send('Pinging...');
+    category: 'General',
+    aliases: ['latency'],
+    desc: 'Get the bot latency',
+    cooldown: 0,
+    scope: 'any',
+    nsfw: false,
+    owner: false,
 
-        embed
-            .setTitle('Pong!')
-            .addField('Server Latency', `\`${message.createdTimestamp - msg.createdTimestamp}ms\``)
-            .addField('API Latency', `\`${Math.round(client.ws.ping)}ms\``);
-
-        message.delete();
-        message.channel.send(embed);
+    execute ({ client, msg }) {
+        msg.channel.send('Pinging...').then(m => {
+            const latency = Math.floor(m.createdTimestamp - msg.createdTimestamp);
+            return m.edit(`Latency: \`${latency}ms\`\nAPI: \`${Math.floor(client.ws.ping)}ms\``);
+        });
     }
 }

@@ -21,8 +21,12 @@
   },
   "homepage": "https://github.com/xirxo/Kibina#readme",
   "dependencies": {
-    "@types/node": "^15.12.1",
     "chalk": "^4.1.1",
-    "discord.js": "^12.5.3"
+    "discord.js": "^12.5.3",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.1",
+    "@types/node-fetch": "^2.5.10"
   }
 }

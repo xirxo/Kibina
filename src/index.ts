@@ -4,6 +4,7 @@ import { settings } from './env.js';
 import { Client } from './extends/Client.js';
 import { CommandCollection } from './extends/CommandCollection.js';
 import { logger } from './tools/logger.js';
+import { Client as DiscordClient } from 'discord.js';
 
 const client = new Client();
 client.commands = new CommandCollection();
@@ -13,7 +14,7 @@ async function main() {
         const { event }: { event: Event } = await import(`./events/${file}`);
 
         logger('info', `${event.name} event loaded`);
-        client[event.emitter](event.name, (...args: any) => event.emit(...args, client));
+        (client as DiscordClient)[event.emitter](event.name, (...args: unknown[]) => event.emit(...args, client));
     }
 
     readdirSync('./build/commands/').forEach(async (dir) => {
@@ -22,14 +23,12 @@ async function main() {
 
             logger('info', `${command.name} command loaded`);
             client.commands.set(command.name, command);
-
-            if (command.aliases && command.aliases.length)
-                command.aliases.forEach(cmd => client.commands.set(cmd, command));
         }
     });
 
 
     await client.login(settings.token);
 }
+
 console.clear();
 main();

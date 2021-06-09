@@ -6,6 +6,6 @@ export const event: Event = {
     name: 'ready',
     emitter: 'once',
     emit: (client: Client) => {
-        return logger('info', `Logged in as ${client!.user?.tag}`);
+        return logger('info', `Logged in as ${client.user?.tag}`);
     }
 }

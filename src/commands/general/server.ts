@@ -2,25 +2,32 @@ import { Command } from '../../../typings/index';
 
 export const command: Command = {
     name: 'server',
+    category: 'General',
+    aliases: ['serverinfo', 'si'],
+    desc: 'Information about the current server',
+    cooldown: 0,
     scope: 'guild',
-    execute: ({ embed, msg }) => {
-        const server = msg.guild;
-        let role = server?.roles.cache.sort((a, b) => b.position - a.position).map(r => r).join(',');
+    nsfw: false,
+    owner: false,
 
-        if (!role) role = 'No role to display';
-        if (role.length > 200) role = 'To many roles to display'
+    async execute ({ embed, client, msg }) {
+        const owner = await client.users.fetch(msg.guild?.ownerID as string);
+        const server = await client.guilds.fetch(msg.guild?.id as string);
+        
+        let role;
+        role = server.roles.cache.sort((a, b) => b.position - a.position).map(r => r).join(', ')
+
+        if (role.length > 200) role = 'Too many roles to display';
+        else if (!role.length) role = 'No role to display';
 
         embed
-            .setTitle(`Information about ${server?.name}`)
-            .addField('Name', server?.name, true)
-            .addField('ID', `\`${server?.id}\``, true)
-            .addField('Owner', server?.owner, true)
-            .addField('Owner\'s ID', `\`${server?.ownerID}\``, true)
-            .addField('Member count', server?.memberCount, true)
-            .addField('Roles', role, true)
-            
-        server?.iconURL({ dynamic: true }) ? embed.setThumbnail(server?.iconURL({ dynamic: true }) as string).addField('Icon', `[Click here](${server?.iconURL({ dynamic: true })} '${server?.name}'s Icon')`) : null;
+        .setTitle(server.name)
+        .addField('Owner', `Tag: ${owner.tag}\nID: ${owner.id}`)
+        .addField('Members', `Total: ${server.memberCount}`)
+        .addField('Roles', role)
 
-        msg.channel.send(embed);
+        if (server.iconURL()) embed.setThumbnail(server.iconURL({ dynamic: true }) as string);
+
+        return msg.channel.send(embed);
     }
 }

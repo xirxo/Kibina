@@ -1,14 +1,17 @@
-import { Message, MessageEmbed } from 'discord.js';
-import { Client } from '../build/extends/Client.js';
+import { Message, MessageEmbed, Client } from 'discord.js';
+
+declare module 'string-math';
 
 export interface Command {
     name: string;
+    category: string;
+    aliases: string[];
+    desc: string;
+    cooldown: number;
+    scope: 'dm' | 'guild' | 'any';
+    nsfw: boolean;
+    owner: boolean;
     execute: (argument: CommandArgs) => void;
-
-    aliases?: string[];
-    desc?: string;
-    cooldown?: number;
-    scope?: 'guild' | 'dm' | 'all'
 }
 
 export interface Event {
@@ -24,4 +27,4 @@ export interface CommandArgs {
     msg: Message;
 }
 
-export type LoggerType = 'info' | 'warn' | 'error'
+export type LoggerType = 'info' | 'warn' | 'error';
