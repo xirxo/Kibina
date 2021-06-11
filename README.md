@@ -6,6 +6,9 @@
 1. [Git](https://git-scm.org/ 'Git')
 2. [NodeJS](https://nodejs.org/ 'NodeJS')
 3. [NPM](https://npmjs.org/ 'NPM')
+4. [TypeScript](https://www.typescriptlang.org 'TypeScript')
+5. [Nodemon](https://github.com/remy/nodemon/ 'Nodemon') (Optional)
+6. [PM2](https://pm2.keymetrics.io/ 'PM2') (Optional)
 
 ## Cloning
 To clone this repo, simply execute the following command:
