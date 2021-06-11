@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "npm run build -- --watch",
-    "start": "bash ./run.sh"
+    "dev": "bash ./dev.sh",
+    "start": "bash ./prod.sh"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "dependencies": {
     "chalk": "^4.1.1",
     "discord.js": "^12.5.3",
+    "mongoose": "^5.12.13",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {

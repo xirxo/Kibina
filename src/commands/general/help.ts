@@ -10,6 +10,7 @@ export const command: Command = {
     scope: 'any',
     nsfw: false,
     owner: false,
+    guildOwner: false,
 
     execute ({ embed, msg, args, client }) {
         const cmd: Command | null | undefined = args[0] ? ((client as Client).commands.get(args[0].toLowerCase()) || (client as Client).commands.find((cmd: Command) => cmd.aliases && cmd.aliases.includes(args[0].toLowerCase()))) : null;
@@ -24,7 +25,8 @@ export const command: Command = {
             .addField('Cooldown', cmd.cooldown ? `${cmd.cooldown}s` : 'None')
             .addField('Scope', `\`${cmd.scope}\``)
             .addField('NSFW?', cmd.nsfw ? `\`true\`` : `\`false\``)
-            .addField('Owner only?', cmd.nsfw ? `\`true\`` : `\`false\``);
+            .addField('Owner only?', cmd.owner ? `\`true\`` : `\`false\``)
+            .addField('Guild owner only?', cmd.guildOwner ? `\`true\`` : `\`false\``)
 
             return msg.channel.send(embed);
         }

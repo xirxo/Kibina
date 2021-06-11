@@ -11,8 +11,9 @@ export const command: Command = {
     scope: 'any',
     nsfw: false,
     owner: false,
+    guildOwner: false,
 
-    async execute({ client, embed, args, msg }) {
+    async execute({ client, embed, args, msg, data }) {
         let user: User | undefined = undefined;
         let member: GuildMember | undefined = undefined;
 
@@ -23,14 +24,14 @@ export const command: Command = {
         if (msg.guild) member = await msg.guild.members.fetch(user);
 
         if (user.id === client.user!.id) {
-            (await import('./info.js')).command.execute({ msg: msg, client: client, args: args, embed: embed });
+            (await import('./info.js')).command.execute({ msg: msg, client: client, args: args, embed: embed, data: data });
             return;
         }
 
         embed
         .setTitle(user.tag)
         .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-        .addField('ID', user.id)
+        .addField('ID', `\`${user.id}\``)
         .addField('Created at', time(user.createdTimestamp));
 
         if (member) embed.addField('Joined at', time(member.joinedTimestamp as number));

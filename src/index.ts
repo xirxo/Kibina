@@ -1,13 +1,16 @@
 import { readdirSync } from 'fs';
-import { Command, Event } from '../typings/index.js';
+import { Command, Data, Event } from '../typings/index.js';
 import { settings } from './env.js';
 import { Client } from './extends/Client.js';
 import { CommandCollection } from './extends/CommandCollection.js';
 import { logger } from './tools/logger.js';
 import { Client as DiscordClient } from 'discord.js';
+import mongoose from 'mongoose';
+import * as data from './database/mongoose.js';
 
 const client = new Client();
 client.commands = new CommandCollection();
+client.data = (data as unknown as Data);
 
 async function main() {
     for (const file of readdirSync('./build/events/').filter(file => file.endsWith('.js'))) {
@@ -26,8 +29,17 @@ async function main() {
         }
     });
 
-
-    await client.login(settings.token);
+    try {
+        await client.login(settings.token);
+        await mongoose.connect(settings.mongodb, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    } catch (error) {
+        return logger('error', error.message);
+    }
+    
+    logger('info', 'Connected to MongoDB Atlas');
 }
 
 console.clear();

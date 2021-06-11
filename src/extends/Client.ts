@@ -1,5 +1,6 @@
 import { Client as BaseClient, ClientOptions, Collection } from 'discord.js';
-import { Command } from '../../typings';
+import { Command, Data } from '../../typings';
+import { settings } from '../env';
 import { CommandCollection } from './CommandCollection.js';
 
 export class Client extends BaseClient {
@@ -8,4 +9,5 @@ export class Client extends BaseClient {
     }
 
     public commands: Collection<string, Command> = new CommandCollection();
+    public data: Data | undefined = undefined;
 }

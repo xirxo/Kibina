@@ -1,5 +1,5 @@
 import { ClientUser, Message, TextChannel } from 'discord.js';
-import { Command, Event } from '../../typings/index.js';
+import { Command, DataObject, Event, GuildDB, UserDB } from '../../typings/index.js';
 import { settings } from '../env.js';
 import { Client } from '../extends/Client.js';
 import { embed as embedFunc } from '../tools/embed.js';
@@ -9,21 +9,35 @@ export const event: Event = {
     name: 'message',
     emitter: 'on',
     async emit (message: Message, client: Client) {
+        let prefix: string;
+        const data: DataObject = {
+            user: await client.data?.getUser(message.author.id) as UserDB,
+            guild: null,
+        };
+
+        if (message.guild) {
+            data.guild = await client.data?.getGuild(message.guild.id) as GuildDB;
+            prefix = data.guild!.prefix as string ?? settings.prefix
+        } else {
+            prefix = settings.prefix;
+        }
+
         const embed = embedFunc(message.author, client.user as ClientUser);
 
         if (message.author.bot) return;
 
-        if (!message.content.startsWith(settings.prefix)) {
+        if (!message.content.startsWith(prefix)) {
             if (message.content === `<@${client.user?.id}>` || message.content === `<@!${client.user?.id}>`) {
                 embed
-                    .setTitle('Hello?')
-                    .setDescription(`Did you just pinged me? Anyways... My prefix for this server is \`${settings.prefix}\``);
+                .setTitle('Hello?')
+                .setDescription(`Did you just pinged me? Anyways... My prefix ${message.guild ? 'for this server ' : ''}is \`${prefix}\``);
 
                 return message.channel.send(embed);
             }
 
-            else
+            else {
                 return;
+            }
         }
 
         const args = message.content.slice(settings.prefix.length).split(/ +/);
@@ -37,7 +51,7 @@ export const event: Event = {
             .setDescription('This command is reserved for the owner only');
 
             const msg = await message.channel.send(embed);
-            setTimeout(msg.delete, 3000);
+            setTimeout(() => msg.delete(), 3000);
         }
 
         else if (cmd.nsfw) {
@@ -47,7 +61,7 @@ export const event: Event = {
                 .setDescription('This command can only be used in NSFW marked channel or in my DMs')
 
                 const msg = await message.channel.send(embed);
-                setTimeout(msg.delete, 3000);
+                setTimeout(() => msg.delete(), 3000);
             }
         }
 
@@ -57,7 +71,7 @@ export const event: Event = {
             .setDescription('This command can only be used in a server');
 
             const msg = await message.channel.send(embed);
-            setTimeout(msg.delete, 3000);
+            setTimeout(() => msg.delete(), 3000);
         }
 
         else if (cmd.scope === 'dm' && message.guild) {
@@ -66,11 +80,11 @@ export const event: Event = {
             .setDescription('This command can only be used in my DMs');
 
             const msg = await message.channel.send(embed);
-            setTimeout(msg.delete, 3000);
+            setTimeout(() => msg.delete(), 3000);
         }
 
         try {
-            (cmd as Command).execute({ args: args, client: client, embed: embed, msg: message });
+            (cmd as Command).execute({ args: args, client: client, embed: embed, msg: message, data: data });
         } catch (err) {
             logger('error', err.message);
 

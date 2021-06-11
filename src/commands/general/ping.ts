@@ -9,7 +9,8 @@ export const command: Command = {
     scope: 'any',
     nsfw: false,
     owner: false,
-
+    guildOwner: false,
+    
     execute ({ client, msg }) {
         msg.channel.send('Pinging...').then(m => {
             const latency = Math.floor(m.createdTimestamp - msg.createdTimestamp);

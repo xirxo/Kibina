@@ -9,7 +9,8 @@ export const command: Command = {
     scope: 'guild',
     nsfw: false,
     owner: false,
-
+    guildOwner: false,
+    
     async execute ({ embed, client, msg }) {
         const owner = await client.users.fetch(msg.guild?.ownerID as string);
         const server = await client.guilds.fetch(msg.guild?.id as string);
@@ -22,8 +23,8 @@ export const command: Command = {
 
         embed
         .setTitle(server.name)
-        .addField('Owner', `Tag: ${owner.tag}\nID: ${owner.id}`)
-        .addField('Members', `Total: ${server.memberCount}`)
+        .addField('Owner', `Tag: \`${owner.tag}\`\nID: \`${owner.id}\``)
+        .addField('Members', `Total: \`${server.memberCount}\` members`)
         .addField('Roles', role)
 
         if (server.iconURL()) embed.setThumbnail(server.iconURL({ dynamic: true }) as string);

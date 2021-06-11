@@ -1,6 +1,25 @@
 import { Message, MessageEmbed, Client } from 'discord.js';
 
-declare module 'string-math';
+export interface Data {
+    getGuild: (id: string) => Promise<GuildDB | null>;
+    getUser: (id: string) => Promise<UserDB | null>;
+}
+
+export interface DataObject {
+    guild: GuildDB | null;
+    user: UserDB | null;
+}
+
+export interface GuildDB {
+    id: string;
+    prefix?: string;
+}
+
+export interface UserDB {
+    id: string;
+    inv?: string[];
+    money?: number;
+}
 
 export interface Command {
     name: string;
@@ -11,6 +30,7 @@ export interface Command {
     scope: 'dm' | 'guild' | 'any';
     nsfw: boolean;
     owner: boolean;
+    guildOwner: boolean;
     execute: (argument: CommandArgs) => void;
 }
 
@@ -25,6 +45,7 @@ export interface CommandArgs {
     client: Client;
     embed: MessageEmbed;
     msg: Message;
+    data: DataObject;
 }
 
 export type LoggerType = 'info' | 'warn' | 'error';

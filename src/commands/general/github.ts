@@ -10,6 +10,7 @@ export const command: Command = {
     scope: 'any',
     nsfw: false,
     owner: false,
+    guildOwner: false,
 
     async execute({ embed, msg, args }) {
         const user = !args[0] ? 'xirxo' : args[0];
@@ -25,11 +26,11 @@ export const command: Command = {
             .setDescription(repoJSON.description)
             .setThumbnail(repoJSON.owner.avatar_url)
             .addField('Repo', `[Click here](${repoJSON.html_url})`)
-            .addField('Statistics', `Stars: ${repoJSON.stargazers_count}\nForks: ${repoJSON.forks}`);
+            .addField('Statistics', `Stars: \`${repoJSON.stargazers_count}\`\nForks: \`${repoJSON.forks}\``);
 
             return msg.channel.send(embed)
         } else {
-            return msg.channel.send('Request returned a 404');
+            return msg.channel.send(`Request returned a \`${gh.status}\``);
         }
     }
 };
