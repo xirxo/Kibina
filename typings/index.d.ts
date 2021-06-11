@@ -13,12 +13,14 @@ export interface DataObject {
 export interface GuildDB {
     id: string;
     prefix?: string;
+    save: () => Promise<void>;
 }
 
 export interface UserDB {
     id: string;
     inv?: string[];
     money?: number;
+    save: () => Promise<void>;
 }
 
 export interface Command {
